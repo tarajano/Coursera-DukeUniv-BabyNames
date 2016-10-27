@@ -5,6 +5,18 @@ import org.apache.commons.csv.*;
 
 public class BabyBirths {
 
+	public static String getName(int year, int rank, String gender){
+		String name = "NO NAME";
+		FileResource file = new FileResource();
+		int pos = 0;
+		for(CSVRecord rec : file.getCSVParser(false)){
+			if(rec.get(1).equals(gender))
+				pos++;
+				if(pos == rank)
+					return rec.get(0);
+		}
+		return name;
+	} 
 	public static int getRank(int year, String name, String gender){
 		FileResource file = new FileResource();
 		int name_rank = 0;
@@ -52,11 +64,22 @@ public class BabyBirths {
 		else
 			System.out.println("Name: " + name + " was not found in year " + year + ".");
 	}
+	public static void testGetName(){
+		int year = 2012;
+		int rank = 5;
+		String gender = "F";
+		String name = getName(year, rank, gender);
+		if(name.equals("NO NAME"))
+			System.out.println("No name found at rank: " + rank + " for gender: " + gender + ".");
+		else
+			System.out.println("Name: " + name + " is ranked: " + rank + " for gender: " + gender + ".");
+	}
+	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		//printNames();
 		//testTotalBirths();
-		testGetRank();
+		//testGetRank();
+		//testGetName();
 		
 	}
 

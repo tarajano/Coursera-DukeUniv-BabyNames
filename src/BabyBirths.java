@@ -5,6 +5,17 @@ import org.apache.commons.csv.*;
 
 public class BabyBirths {
 
+	public static int getRank(int year, String name, String gender){
+		FileResource file = new FileResource();
+		int name_rank = 0;
+		for(CSVRecord rec : file.getCSVParser(false)){
+			if(rec.get(1).equals(gender))
+				name_rank++;
+				if(rec.get(0).equals(name))
+					return name_rank;
+		}
+		return -1;
+	}
 	public static void printNames() {
 		FileResource input_file = new FileResource("us_babynames/us_babynames_test/example-small.csv");
 		int num_born_limit = 100;
@@ -31,10 +42,22 @@ public class BabyBirths {
 	public static void testTotalBirths(){
 		totalBirths(new FileResource("us_babynames/us_babynames_test/example-small.csv"));
 	}
+	public static void testGetRank(){
+		int year = 2012;
+		String name = "Mason";
+		String gender = "M";
+		int rank = getRank(year, name, gender);
+		if(rank != -1)
+			System.out.println("Name: " + name + " ranks " + rank + " in year " + year + ".");
+		else
+			System.out.println("Name: " + name + " was not found in year " + year + ".");
+	}
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		//printNames();
-		testTotalBirths();
+		//testTotalBirths();
+		testGetRank();
+		
 	}
 
 }

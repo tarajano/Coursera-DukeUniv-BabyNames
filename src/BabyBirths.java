@@ -5,9 +5,24 @@ import org.apache.commons.csv.*;
 
 public class BabyBirths {
 
+	// here .. just create tester method
+	public static String whatIsNameInYear(String name, int orig_year, int new_year, String gender){
+		String name_new_year = null;		
+		int name_rank_orig_year = getRank(orig_year, name, gender);
+		name_new_year = getName(new_year, name_rank_orig_year, gender);
+		return name_new_year;
+	}
+	public static String buildFilePathFromYear(int year){
+		// yob2012short.csv
+		String path = "us_babynames/us_babynames_test/";
+		String file_name_start = "yob";
+		String file_extension = "short.csv";
+		return path + file_name_start + year + file_extension;	
+	}
 	public static String getName(int year, int rank, String gender){
-		String name = "NO NAME";
-		FileResource file = new FileResource();
+		String name = null;
+		String file_full_path = buildFilePathFromYear(year);		
+		FileResource file = new FileResource(file_full_path);
 		int pos = 0;
 		for(CSVRecord rec : file.getCSVParser(false)){
 			if(rec.get(1).equals(gender))
@@ -18,7 +33,8 @@ public class BabyBirths {
 		return name;
 	} 
 	public static int getRank(int year, String name, String gender){
-		FileResource file = new FileResource();
+		String file_full_path = buildFilePathFromYear(year);		
+		FileResource file = new FileResource(file_full_path);
 		int name_rank = 0;
 		for(CSVRecord rec : file.getCSVParser(false)){
 			if(rec.get(1).equals(gender))
@@ -69,17 +85,25 @@ public class BabyBirths {
 		int rank = 5;
 		String gender = "F";
 		String name = getName(year, rank, gender);
-		if(name.equals("NO NAME"))
+		if(name == null)
 			System.out.println("No name found at rank: " + rank + " for gender: " + gender + ".");
 		else
 			System.out.println("Name: " + name + " is ranked: " + rank + " for gender: " + gender + ".");
 	}
-	
+	public static void testWhatIsNameInYear(){
+		String name = "Isabella";
+		int orig_year = 2012;
+		int new_year = 2014;
+		String gender = "F";
+		String new_name = whatIsNameInYear(name, orig_year, new_year, gender);
+		System.out.println(name + " born in " + orig_year + " would be " + new_name + " if s/he was born in " + new_year + ".");
+	}
 	public static void main(String[] args) {
 		//printNames();
 		//testTotalBirths();
 		//testGetRank();
 		//testGetName();
+		testWhatIsNameInYear();
 		
 	}
 

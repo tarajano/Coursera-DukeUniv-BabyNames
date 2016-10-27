@@ -18,9 +18,9 @@ public class BabyBirths {
 		int girls = 0;
 		for(CSVRecord rec : input_file.getCSVParser(false)){
 			if(rec.get(1).equals("M"))
-				boys += 1;
+				boys += Integer.parseInt(rec.get(2));
 			else if(rec.get(1).equals("F"))
-				girls += 1;
+				girls += Integer.parseInt(rec.get(2));
 		}
 		System.out.println("Total:" + (boys + girls) +  " Girls:" + girls + " Boys:" + boys);
 	}

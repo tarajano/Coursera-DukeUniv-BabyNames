@@ -8,6 +8,29 @@ import org.apache.commons.csv.*;
 
 public class BabyBirths {
 
+	public static double getAverageRank(String name, String gender){
+		int name_pos_sum = 0;
+		int name_occurrences = 0;
+		DirectoryResource dr = new DirectoryResource();
+		for (File file : dr.selectedFiles()){
+			FileResource input_file = new FileResource(file);
+			int pos = 0;
+			for(CSVRecord rec : input_file.getCSVParser(false)){
+				if(rec.get(1).equals(gender)){
+					pos++;
+					if(rec.get(0).equals(name)){
+						name_occurrences++;
+						name_pos_sum += pos;
+						break;
+					}
+				}
+			}
+		}
+		if(name_occurrences > 0)
+			return (double) name_pos_sum / name_occurrences;
+		else
+			return 0.0;
+	}
 	public static int yearOfHighestRank(String name, String gender){
 		int highest_rank = 99999999;
 		int highest_rank_year = -1;
@@ -137,7 +160,12 @@ public class BabyBirths {
 		else
 			System.out.println("Name: " + name + " not found.");
 	}
-	
+	public static void testGetAverageRank(){
+		String name = "Mason";
+		String gender = "M";
+		double ave_rank = getAverageRank(name, gender);
+		System.out.println("The average rank for " + name + " is: " + String.format( "%.2f", ave_rank));
+	}
 	public static void main(String[] args) {
 		//printNames();
 		//testTotalBirths();
@@ -145,6 +173,7 @@ public class BabyBirths {
 		//testGetName();
 		//testWhatIsNameInYear();
 		//testYearOfHighestRank();
+		testGetAverageRank();
 		
 	}
 

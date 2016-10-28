@@ -18,7 +18,7 @@ public class BabyBirths {
 			for(CSVRecord rec : input_file.getCSVParser(false)){
 				if(rec.get(1).equals(gender) && !rec.get(0).equals(name))
 					births = births + Integer.parseInt(rec.get(2));
-				if(rec.get(0).equals(name))
+				if(rec.get(0).equals(name) && rec.get(1).equals(gender))
 					break;
 			}
 		}
@@ -82,10 +82,9 @@ public class BabyBirths {
 		return name_new_year;
 	}
 	public static String buildFilePathFromYear(int year){
-		// yob2012short.csv
-		String path = "us_babynames/us_babynames_test/";
+		String path = "../us_babynames/us_babynames_by_year/";
 		String file_name_start = "yob";
-		String file_name_end = "short.csv";
+		String file_name_end = ".csv";
 		return path + file_name_start + year + file_name_end;	
 	}
 	public static String getName(int year, int rank, String gender){

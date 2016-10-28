@@ -1,11 +1,41 @@
 
 import edu.duke.*;
+
+import java.io.File;
+
 //import java.io.*;
 import org.apache.commons.csv.*;
 
 public class BabyBirths {
 
-	// here .. just create tester method
+	public static int yearOfHighestRank(String name, String gender){
+		int highest_rank = 99999999;
+		int highest_rank_year = -1;
+		DirectoryResource dr = new DirectoryResource();
+		for (File file : dr.selectedFiles()){
+			int pos = 0;
+			int current_file_year = parseYearFromFileName(file.getName());
+			FileResource input_file = new FileResource(file);			
+			for(CSVRecord rec : input_file.getCSVParser(false)){
+				pos++;
+				if(rec.get(0).equals(name) && rec.get(1).equals(gender)){
+					if(pos < highest_rank){
+						highest_rank_year = current_file_year;
+						highest_rank = pos;
+					}
+					break;
+				}
+			}
+		}
+		if(highest_rank_year != -1)
+			return highest_rank_year;
+		else
+			return -1;
+	}
+	public static int parseYearFromFileName(String file_name){
+		// yob2012short.csv
+		return Integer.parseInt(file_name.substring(3,7));
+	}
 	public static String whatIsNameInYear(String name, int orig_year, int new_year, String gender){
 		String name_new_year = null;		
 		int name_rank_orig_year = getRank(orig_year, name, gender);
@@ -16,8 +46,8 @@ public class BabyBirths {
 		// yob2012short.csv
 		String path = "us_babynames/us_babynames_test/";
 		String file_name_start = "yob";
-		String file_extension = "short.csv";
-		return path + file_name_start + year + file_extension;	
+		String file_name_end = "short.csv";
+		return path + file_name_start + year + file_name_end;	
 	}
 	public static String getName(int year, int rank, String gender){
 		String name = null;
@@ -98,12 +128,23 @@ public class BabyBirths {
 		String new_name = whatIsNameInYear(name, orig_year, new_year, gender);
 		System.out.println(name + " born in " + orig_year + " would be " + new_name + " if s/he was born in " + new_year + ".");
 	}
+	public static void testYearOfHighestRank(){
+		String name  = "Mason";
+		String genre = "M";
+		int top_rank_year = yearOfHighestRank(name, genre);
+		if(top_rank_year != -1)
+			System.out.println("Best ranking year for: " + name + " was: " + top_rank_year + ".");
+		else
+			System.out.println("Name: " + name + " not found.");
+	}
+	
 	public static void main(String[] args) {
 		//printNames();
 		//testTotalBirths();
 		//testGetRank();
 		//testGetName();
-		testWhatIsNameInYear();
+		//testWhatIsNameInYear();
+		//testYearOfHighestRank();
 		
 	}
 
